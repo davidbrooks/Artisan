@@ -1,0 +1,17 @@
+Artisan.js
+Created by David Brooks
+Version 1.0
+
+See http://www.artisanjs.com for all the details
+
+I wrote Artisan to remove some of the redundancies and guess work that come with using Canvas, and hopefully to enhance it a little bit in the process. In version 1.0, I wanted to focus on getting all of the basic drawing functions of Canvas simplified and the layering scheme at least loosely in place. There will be much more to come, so you can run and tell that homeboy...
+
+You can read more about the specifics and technical details over at http://www.artisanjs.com/help
+
+I hope that you find this library helpful and useful.
+
+David
+
+
+
+

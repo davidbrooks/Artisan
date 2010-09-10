@@ -1,4 +1,4 @@
-var Library = (function(window, undefined) {
+var artisan = (function(window, undefined) {
 	/* 
 	Artisan.js by David Brooks. Details at http://www.artisanjs.com
 	*/
@@ -115,8 +115,8 @@ var Library = (function(window, undefined) {
 				}
 			}
 			if (context === '') {
-				Library.setupCanvas(element);
-				context = Library.findContext(element);
+				artisan.setupCanvas(element);
+				context = artisan.findContext(element);
 			}
 			return context;
 		},
@@ -144,57 +144,57 @@ var Library = (function(window, undefined) {
 			if (!placex) {
 				placex = 10;
 			} else if (placex === 'random') {
-				placex = Library.randomize(0, target_width);
+				placex = artisan.randomize(0, target_width);
 			} 
 			if (!placey) {
 				placey = 10;
 			} else if (placey === 'random') {
-				placey = Library.randomize(0, target_height);
+				placey = artisan.randomize(0, target_height);
 			}
 			if (!radius) {
 				radius = 10;
 			} else if (radius === 'random') {
-				radius = Library.randomize(0, target_width);
+				radius = artisan.randomize(0, target_width);
 			}
 			if (fill_color === null) {
 				fill_color = '';
 			} else if (!fill_color) {
 				fill_color = default_colors[0];
 			} else if (fill_color.constructor.toString().indexOf("Array") !== -1) {
-				var chosen = Library.randomize(0,fill_color.length);
+				var chosen = artisan.randomize(0,fill_color.length);
 				fill_color = fill_color[chosen];
 			} else if (fill_color === 'random'){
-				var chosen_fill = Library.randomize(0, default_colors.length);
+				var chosen_fill = artisan.randomize(0, default_colors.length);
 				fill_color = default_colors[chosen_fill];
 			}
 			if (!line_width) {
 				line_width = 0;
 			} else if (line_width === 'random') {
-				line_width = Library.randomize(0,50);
+				line_width = artisan.randomize(0,50);
 			}
 			if (!stroke_color) {
 				stroke_color = default_colors[0];
 			} else if (stroke_color === 'random') {
-				stroke_color = default_colors[Library.randomize(0, default_colors.length)];
+				stroke_color = default_colors[artisan.randomize(0, default_colors.length)];
 			} else if (stroke_color.constructor.toString().indexOf("Array") !== -1) {
-				stroke_color = stroke_color[Library.randomize(0,stroke_color.length)];
+				stroke_color = stroke_color[artisan.randomize(0,stroke_color.length)];
 			}
 			if (!alpha){
 				alpha = 1;
 			} else if (alpha === 'random') {
-				alpha = Library.randomize(0, 100) / 100;
+				alpha = artisan.randomize(0, 100) / 100;
 			}
 			if (!shadow_blur) {
 				shadow_blur = 0;
 			} else if (shadow_blur === 'random') {
-				shadow_blur = Library.randomize(0,30);
+				shadow_blur = artisan.randomize(0,30);
 			} 
 			if (!shadow_color) {
 				shadow_color = '';
 			} else if (shadow_color === 'random') {
-				shadow_color = default_colors[Library.randomize(0,default_colors.length)];
+				shadow_color = default_colors[artisan.randomize(0,default_colors.length)];
 			} else if (shadow_color.length) {
-				shadow_color = shadow_color[Library.randomize(0,shadow_color.length)];
+				shadow_color = shadow_color[artisan.randomize(0,shadow_color.length)];
 			}
 			if (!shadow_offset_x || isNaN(shadow_offset_x)){
 				shadow_offset_x = 0;
@@ -206,11 +206,11 @@ var Library = (function(window, undefined) {
 			var this_set = ['circle', this_circle];
 			current_history.push(this_set);
 
-			var format = Library.interpretElement(target);			
+			var format = artisan.interpretElement(target);			
 			switch(format) {
 			case "CANVAS":
 				// Canvas
-				var context = Library.findContext(target);
+				var context = artisan.findContext(target);
 				context.beginPath();
 				
 				context.lineWidth = line_width;
@@ -267,62 +267,62 @@ var Library = (function(window, undefined) {
 			if (!start_x) {
 				start_x = 10;
 			} else if (start_x === 'random') {
-				start_x = Library.randomize(0, target_width);
+				start_x = artisan.randomize(0, target_width);
 			} 
 			if (!start_y) {
 				start_y = 10;
 			} else if (start_y === 'random') {
-				start_y = Library.randomize(0, target_height);
+				start_y = artisan.randomize(0, target_height);
 			}
 			if (!width) {
 				width = 15;
 			} else if (width === 'random') {
-				width = Library.randomize(0, target_height);
+				width = artisan.randomize(0, target_height);
 			}
 			if (!height) {
 				height = 15;
 			} else if (height === 'random') {
-				height = Library.randomize(0, target_height);
+				height = artisan.randomize(0, target_height);
 			}
 			if (fill_color === null) {
 				fill_color = '';
 			} else if (!fill_color) {
 				fill_color = default_colors[0];
 			} else if (fill_color.constructor.toString().indexOf("Array") !== -1) {
-				var chosen = Library.randomize(0,fill_color.length);
+				var chosen = artisan.randomize(0,fill_color.length);
 				fill_color = fill_color[chosen];
 			} else if (fill_color === 'random'){
-				var chosen_fill = Library.randomize(0, default_colors.length);
+				var chosen_fill = artisan.randomize(0, default_colors.length);
 				fill_color = default_colors[chosen_fill];
 			}
 			if (!line_width) {
 				line_width = 0;
 			} else if (line_width === 'random') {
-				line_width = Library.randomize(0,50);
+				line_width = artisan.randomize(0,50);
 			}
 			if (!stroke_color) {
 				stroke_color = default_colors[0];
 			} else if (stroke_color === 'random') {
-				stroke_color = default_colors[Library.randomize(0, default_colors.length)];
+				stroke_color = default_colors[artisan.randomize(0, default_colors.length)];
 			} else if (stroke_color.length) {
-				stroke_color = stroke_color[Library.randomize(0,stroke_color.length)];
+				stroke_color = stroke_color[artisan.randomize(0,stroke_color.length)];
 			}
 			if (!alpha){
 				alpha = 1;
 			} else if (alpha === 'random') {
-				alpha = Library.randomize(0, 100) / 100;
+				alpha = artisan.randomize(0, 100) / 100;
 			}
 			if (!shadow_blur) {
 				shadow_blur = 0;
 			} else if (shadow_blur === 'random') {
-				shadow_blur = Library.randomize(0,30);
+				shadow_blur = artisan.randomize(0,30);
 			} 
 			if (!shadow_color) {
 				shadow_color = '';
 			} else if (shadow_color === 'random') {
-				shadow_color = default_colors[Library.randomize(0,default_colors.length)];
+				shadow_color = default_colors[artisan.randomize(0,default_colors.length)];
 			} else if (shadow_color.constructor.toString().indexOf("Array") !== -1) {
-				shadow_color = shadow_color[Library.randomize(0,shadow_color.length)];
+				shadow_color = shadow_color[artisan.randomize(0,shadow_color.length)];
 			}
 			
 			if (!shadow_offset_x || isNaN(shadow_offset_x)){
@@ -331,11 +331,11 @@ var Library = (function(window, undefined) {
 			if (!shadow_offset_y || isNaN(shadow_offset_y)){
 				shadow_offset_y = 0;
 			}
-			var format = Library.interpretElement(target);	
+			var format = artisan.interpretElement(target);	
 			switch(format) {
 			case "CANVAS":
 				// Canvas
-				var context = Library.findContext(target);
+				var context = artisan.findContext(target);
 				context.fillStyle = fill_color;
 				context.strokeStyle = stroke_color;
 				context.lineWidth = line_width;
@@ -379,64 +379,64 @@ var Library = (function(window, undefined) {
 				if (!placex) {
 					placex = 10;
 				} else if (placex === 'random') {
-					placex = Library.randomize(0, target_width);
+					placex = artisan.randomize(0, target_width);
 				} 
 				if (!placey) {
 					placey = 10;
 				} else if (placey === 'random') {
-					placey = Library.randomize(0, target_height);
+					placey = artisan.randomize(0, target_height);
 				}
 				if (!width) {
 					width = 100;
 				} else if (width === 'random') {
-					width = Library.randomize(0, target_width);
+					width = artisan.randomize(0, target_width);
 				}
 				if (!height) {
 					height = 100;
 				} else if (height === 'random') {
-					height = Library.randomize(0, target_height);
+					height = artisan.randomize(0, target_height);
 				}
 				if (fill_color === null) {
 					fill_color = '';
 				} else if (!fill_color) {
 					fill_color = default_colors[0];
 				} else if (fill_color.constructor.toString().indexOf("Array") !== -1) {
-					var chosen = Library.randomize(0,fill_color.length);
+					var chosen = artisan.randomize(0,fill_color.length);
 					fill_color = fill_color[chosen];
 				} else if (fill_color === 'random'){
-					var chosen_fill = Library.randomize(0, default_colors.length);
+					var chosen_fill = artisan.randomize(0, default_colors.length);
 					fill_color = default_colors[chosen_fill];
 				}
 				if (!line_width) {
 					line_width = 0;
 				} else if (line_width === 'random') {
-					line_width = Library.randomize(0,50);
+					line_width = artisan.randomize(0,50);
 				}
 				if (!stroke_color) {
 					stroke_color = default_colors[0];
 				} else if (stroke_color === 'random') {
-					stroke_color = default_colors[Library.randomize(0, default_colors.length)];
+					stroke_color = default_colors[artisan.randomize(0, default_colors.length)];
 				} else if (stroke_color.constructor.toString().indexOf("Array") !== -1) {
-					stroke_color = stroke_color[Library.randomize(0,stroke_color.length)];
+					stroke_color = stroke_color[artisan.randomize(0,stroke_color.length)];
 				}
 				if (!alpha){
 					alpha = 1;
 				} else if (alpha === 'random') {
-					alpha = Library.randomize(0, 100) / 100;
+					alpha = artisan.randomize(0, 100) / 100;
 				} else if (alpha <= 1) {
 					alpha = alpha * 100;
 				}
 				if (!shadow_blur) {
 					shadow_blur = 0;
 				} else if (shadow_blur === 'random') {
-					shadow_blur = Library.randomize(0,30);
+					shadow_blur = artisan.randomize(0,30);
 				} 
 				if (!shadow_color) {
 					shadow_color = '';
 				} else if (shadow_color === 'random') {
-					shadow_color = default_colors[Library.randomize(0,default_colors.length)];
+					shadow_color = default_colors[artisan.randomize(0,default_colors.length)];
 				} else if (shadow_color.length) {
-					shadow_color = shadow_color[Library.randomize(0,shadow_color.length)];
+					shadow_color = shadow_color[artisan.randomize(0,shadow_color.length)];
 				}
 				if (!shadow_offset_x || isNaN(shadow_offset_x)){
 					shadow_offset_x = 0;
@@ -444,11 +444,11 @@ var Library = (function(window, undefined) {
 				if (!shadow_offset_y || isNaN(shadow_offset_y)){
 					shadow_offset_y = 0;
 				}
-				var format = Library.interpretElement(target);	
+				var format = artisan.interpretElement(target);	
 				switch(format) {
 				case "CANVAS":
 					// Canvas
-					var context = Library.findContext(target);
+					var context = artisan.findContext(target);
 					var this_image = new Image();
 					this_image.src = src;
 					this_image.style.opacity = alpha;
@@ -470,7 +470,7 @@ var Library = (function(window, undefined) {
 		},
 		drawPath: function(target, path, line_width, line_color, fill_color) {
 			var cp1x, cp1y, cp2x, cp2y, cur_x, cur_y;
-			var context = Library.findContext(target);
+			var context = artisan.findContext(target);
 			if (!path) {
 				path = [[0,0]];
 			}
@@ -523,42 +523,42 @@ var Library = (function(window, undefined) {
 			var target_width = targeted.width;
 			var target_height = targeted.height;
 			if (start_x === 'random') {
-				start_x = Library.randomize(0, target_width);
+				start_x = artisan.randomize(0, target_width);
 			} else if (!start_x || isNaN(start_y)) {
 				start_x = '';
 			}
 			if (start_y === 'random') {
-				start_y = Library.randomize(0, target_height);
+				start_y = artisan.randomize(0, target_height);
 			} else if (!start_y || isNaN(start_y)) {
 				start_y = '';
 			}
 			if (end_x === 'random') {
-				end_x = Library.randomize(0, target_width);
+				end_x = artisan.randomize(0, target_width);
 			} else if (!end_x || isNaN(end_y)) {
 				end_x = '';
 			}
 			if (end_y === 'random') {
-				end_y = Library.randomize(0, target_height);
+				end_y = artisan.randomize(0, target_height);
 			} else if (!end_y || isNaN(end_y)) {
 				end_y = '';
 			}
 			if (cp1_x === 'random') {
-				cp1_x = Library.randomize(0, target_width);
+				cp1_x = artisan.randomize(0, target_width);
 			} else if (!cp1_x || isNaN(cp1_x)) {
 				cp1_x = 0;
 			}
 			if (cp1_y === 'random') {
-				cp1_y = Library.randomize(0, target_height);
+				cp1_y = artisan.randomize(0, target_height);
 			} else if (!cp1_y || isNaN(cp1_y)) {
 				cp1_y = 0;
 			}
 			if (cp2_x === 'random') {
-				cp2_x = Library.randomize(0, target_width);
+				cp2_x = artisan.randomize(0, target_width);
 			} else if (!cp2_x || isNaN(cp2_x)) {
 				cp2_x = 0;
 			}
 			if (cp2_y === 'random') {
-				cp2_y = Library.randomize(0, target_height);
+				cp2_y = artisan.randomize(0, target_height);
 			} else if (!cp2_y || isNaN(cp2_y)) {
 				cp2_y = 0;
 			}
@@ -566,12 +566,12 @@ var Library = (function(window, undefined) {
 				line_width = 0;
 			}
 			if (line_color === 'random') {
-				var chosen_color = Library.randomize(0, default_colors.length);
+				var chosen_color = artisan.randomize(0, default_colors.length);
 				line_color = default_colors[chosen_color];
 			} else if (!line_color || line_color === null) {
 				line_color = '';
 			}
-			var context = Library.findContext(target);
+			var context = artisan.findContext(target);
 			context.beginPath();
 			context.moveTo(start_x, start_y);
 				if (!type) {	
@@ -600,7 +600,7 @@ var Library = (function(window, undefined) {
 			}
 		},
 		closePath: function(target) {
-			var context = Library.findContext(target);
+			var context = artisan.findContext(target);
 			context.closePath();
 		},
 		drawText: function(target, place_x, place_y, text, text_color, weight, size, font, align, alpha, line_width, line_color, baseline){
@@ -608,12 +608,12 @@ var Library = (function(window, undefined) {
 			var target_width = targeted.width;
 			var target_height = targeted.height;
 			if (place_x === 'random') {
-				place_x = Library.randomize(0, target_width);
+				place_x = artisan.randomize(0, target_width);
 			} else if (!place_x || isNaN(place_x)) {
 				place_x = 0;
 			}
 			if (place_y === 'random') {
-				place_y = Library.randomize(0, target_height);
+				place_y = artisan.randomize(0, target_height);
 			} else if (!place_y || isNaN(place_y)) {
 				place_y = 0;
 			}
@@ -621,17 +621,17 @@ var Library = (function(window, undefined) {
 				text = '';
 			}
 			if (text_color === 'random') {
-				chosen_color = Library.randomize(0, default_colors.length);
+				chosen_color = artisan.randomize(0, default_colors.length);
 				text_color = default_colors[chosen_color];
 			} else if (text_color.constructor.toString().indexOf("Array") !== -1) {
-				chosen_color = Library.randomize(0, text_color.length);
+				chosen_color = artisan.randomize(0, text_color.length);
 				text_color = text_color[chosen_color];
 			}
 			if (!weight) {
 				weight = '';
 			}
 			if (size === 'random') {
-				size = Library.randomize(0,190) + 'px';
+				size = artisan.randomize(0,190) + 'px';
 			} else if (!size) {
 				size = '15px';
 			}
@@ -643,17 +643,17 @@ var Library = (function(window, undefined) {
 				align = 'left';
 			}
 			if (alpha === 'random') {
-				alpha = Library.randomize(0,100) / 100;
+				alpha = artisan.randomize(0,100) / 100;
 			} else if (!alpha || isNaN(alpha)) {
 				alpha = 1;
 			}
 			if (line_width === 'random') {
-				line_width = Library.randomize(0, 10);
+				line_width = artisan.randomize(0, 10);
 			} else if (!line_width || isNaN(line_width)) {
 				line_width = 0;
 			}
 			if (line_color === 'random') {
-				chosen_color = Library.randomize(0, default_colors.length);
+				chosen_color = artisan.randomize(0, default_colors.length);
 				line_color = default_colors[chosen_color];
 			} else if (!line_color) {
 				line_color = '';
@@ -661,7 +661,7 @@ var Library = (function(window, undefined) {
 			if (!baseline) {
 				baseline = 'top';
 			}
-			var context = Library.findContext(target);
+			var context = artisan.findContext(target);
 			context.textAlign = align;
 			context.globalAlpha = alpha;
 			context.fillStyle = text_color;
@@ -688,7 +688,7 @@ var Library = (function(window, undefined) {
 					history = stacks[stack][l].length - 1;
 				}
 				
-				Library.drawLayer(target, stack, l, history);
+				artisan.drawLayer(target, stack, l, history);
 			}
 		},
 		drawLayer: function(target, stack, layer, history) {
@@ -718,27 +718,27 @@ var Library = (function(window, undefined) {
 						switch(directive) {
 							case "circle":
 								// Circle
-								Library.drawCircle(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+								artisan.drawCircle(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
 								break;
 							case "rectangle":
 								// Rectangle
-								Library.drawRectangle(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+								artisan.drawRectangle(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
 								break;
 							case "path": 
 								// Path
-								Library.drawPath(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+								artisan.drawPath(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
 								break;
 							case "image": 
 								// Image
-								Library.drawImage(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+								artisan.drawImage(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
 								break;
 							case "line": 
 								// Image
-								Library.drawLine(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+								artisan.drawLine(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
 								break;	
 							case "text":
 								// Text
-								Library.drawText(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+								artisan.drawText(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
 								break;
 							default:
 								// Standard Code
@@ -771,7 +771,7 @@ var Library = (function(window, undefined) {
 			if (amount === 'reset') {
 				amount = global_rotate * -1;
 			}
-			var context = Library.findContext(target);
+			var context = artisan.findContext(target);
 			var div = 360 / amount;
 			global_rotate = global_rotate + amount;
 			if (global_rotate < 0) {
@@ -786,7 +786,7 @@ var Library = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
-			var context = Library.findContext(target);
+			var context = artisan.findContext(target);
 			context.clearRect(0, 0, target_width, target_height);
 		},
 		resetDefaults: function(context){
@@ -794,4 +794,4 @@ var Library = (function(window, undefined) {
 		}
 	};
 })(this);
-Library.create.stack();
+artisan.create.stack();
