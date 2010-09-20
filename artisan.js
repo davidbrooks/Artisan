@@ -30,6 +30,24 @@ var artisan = (function(window, undefined) {
 				default_colors = new_default;
 			}
 		},
+		set: {
+			stackLimit: function(limit){
+				// Default is 5
+				stack_limit = limit;
+			},
+			layerLimit: function(limit){
+				// Default is 5
+				layer_limit = limit;
+			},
+			dataSetLimit: function(limit){
+				// Default is 5
+				data_set_limit = limit;
+			},
+			historyLimit: function(limit){
+				// Default is 300
+				history_limit = limit;
+			}
+		},
 		setupCanvas: function(target){
 			var canvas = document.getElementById(target); 
 			var context = canvas.getContext('2d');
@@ -122,7 +140,6 @@ var artisan = (function(window, undefined) {
 		},
 		drawCircle: function(target, placex, placey, radius, fill_color, line_width, stroke_color, alpha, shadow_blur, shadow_color, shadow_offset_x, shadow_offset_y){
 			// This handles the drawing of a circle in all three supported formats
-			
 			if (placex !== 'random') {
 				placex = parseInt(placex, 10);
 			}
@@ -140,7 +157,6 @@ var artisan = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
-			
 			if (!placex) {
 				placex = 10;
 			} else if (placex === 'random') {
@@ -205,26 +221,22 @@ var artisan = (function(window, undefined) {
 			var this_circle = [placex, placey, radius, fill_color, line_width, stroke_color, alpha, shadow_blur, shadow_color, shadow_offset_x, shadow_offset_y];
 			var this_set = ['circle', this_circle];
 			current_history.push(this_set);
-
+			
 			var format = artisan.interpretElement(target);			
 			switch(format) {
 			case "CANVAS":
 				// Canvas
 				var context = artisan.findContext(target);
 				context.beginPath();
-				
 				context.lineWidth = line_width;
 				context.globalAlpha = alpha;
-				
 				context.arc(placex, placey, radius, 0, Math.PI * 2, true);
 				context.closePath();
-				
 				context.fillStyle = fill_color;
 				if (line_width !== 0) {
 					context.strokeStyle = stroke_color;
 					context.stroke();
 				}
-				
 				if (shadow_blur) { 
 					context.shadowOffsetX = shadow_offset_x;
 					context.shadowOffsetY = shadow_offset_y;
@@ -263,7 +275,6 @@ var artisan = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
-			
 			if (!start_x) {
 				start_x = 10;
 			} else if (start_x === 'random') {
@@ -324,7 +335,6 @@ var artisan = (function(window, undefined) {
 			} else if (shadow_color.constructor.toString().indexOf("Array") !== -1) {
 				shadow_color = shadow_color[artisan.randomize(0,shadow_color.length)];
 			}
-			
 			if (!shadow_offset_x || isNaN(shadow_offset_x)){
 				shadow_offset_x = 0;
 			}
@@ -770,6 +780,8 @@ var artisan = (function(window, undefined) {
 		rotateCanvas: function(target, amount) {
 			if (amount === 'reset') {
 				amount = global_rotate * -1;
+			} else if (amount === 'random') {
+				amount = artisan.randomize(-1, 360);
 			}
 			var context = artisan.findContext(target);
 			var div = 360 / amount;
