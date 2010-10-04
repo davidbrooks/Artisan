@@ -99,9 +99,31 @@ var artisan = (function(window, undefined) {
 				}
 			}
 		},
+		clear: {
+			layer: function(stack, layer){
+				// This clears the given layer of data
+				if (!stack || isNaN(stack)) {
+					stack = 0;
+				}
+				if (!layer || isNaN(layer)) {
+					layer = 0;
+				}
+				var target_layer = stacks[stack][layer];
+				for(l=0; l < target_layer.length; l++) {
+					target_layer[l] = [];
+				}
+			}
+		},
 		collect: {
 			current_history: function(){
 				return current_history;
+			}
+		},
+		convertTo: {
+			PNG: function(target){
+				var image_file = document.getElementById(target);
+				image_file = image_file.toDataURL();
+				return image_file;
 			}
 		},
 		addToHistory: function(stack, layer, history_step, directive, information){
@@ -756,12 +778,10 @@ var artisan = (function(window, undefined) {
 					}
 					var old_history = stacks[stack][layer][history].toString();
 					var new_history = current_history.toString();
-					if (new_history === old_history) {
-						
-					} else {
-						stacks[stack][layer].push(current_history);
+					if (new_history !== old_history) {
+						stacks[stack][layer][history].push(current_history);
 						if (stacks[stack][layer].length > history_limit) {
-							stacks[stack][layer].splice(0,1);
+							stacks[stack][layer][history].splice(1,1);
 						}
 					}
 		},
