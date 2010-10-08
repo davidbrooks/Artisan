@@ -8,6 +8,8 @@ var artisan = (function(window, undefined) {
 	// Stacks are the collections of layers, and histories
 	var stacks = [];
 	var color_schemes = [];
+	// Grids create an array of data to be placed evenly on your canvas
+	var grids = [];
 	// Default values
 	var default_colors = ['#AC4A08', '#6C88A1', '#D9DCC6', '#EB9E1A', '#FBCC37'];
 	var stack_limit = 5;
@@ -97,6 +99,25 @@ var artisan = (function(window, undefined) {
 				if (stacks[stack][layer].length > history_limit) {
 					stacks[stack][layer].splice(0,1);
 				}
+			},
+			// Creates a grid with x columns and y rows. Style defines 'flex' or 'fixed' and cell_width/cell_height give fixed dimensions
+			grid: function(xs, ys, style, cell_width, cell_height){
+				var grid_cells = [];
+				for (y = 0; y < ys; y++) {
+					for (x = 0; x < xs; x++) {
+						var this_cell = [];
+						grid_cells.push(this_cell);
+					}
+				}
+				var xs = parseInt(xs);
+				var ys = parseInt(ys);
+				if (!style) {
+					style = 'flex';
+					cell_width = 0;
+					cell_height = 0;
+				}
+				var new_grid = [grid_cells, xs, ys, style, cell_width, cell_height];
+				grids.push(new_grid);
 			}
 		},
 		clear: {
@@ -142,6 +163,9 @@ var artisan = (function(window, undefined) {
 			if (stacks[stack][layer][history_step].length > history_limit) {
 				stacks[stack][layer][history_step].splice(0,1);
 			}
+		},
+		addToGrid: function(grid, x, y, contents){
+			
 		},
 		interpretElement: function(element){
 			var target = document.getElementById(element).tagName;
@@ -784,6 +808,9 @@ var artisan = (function(window, undefined) {
 							stacks[stack][layer][history].splice(1,1);
 						}
 					}
+		},
+		drawGrid: function(target, grid){
+			
 		},
 		randomize: function(l,h){
 			var generated = parseInt(l + (Math.random() * (h - l)), 10);
