@@ -10,10 +10,6 @@ var artisan = (function(window, undefined) {
 	var color_schemes = [];
 	// Default values
 	var default_colors = ['#AC4A08', '#6C88A1', '#D9DCC6', '#EB9E1A', '#FBCC37'];
-	var stack_limit = 5;
-	var layer_limit = 5;
-	var data_set_limit = 5;
-	var history_limit = 300;
 	var contexts = [];
 	var global_rotate = 0;
 	var current_history = [];
@@ -28,24 +24,6 @@ var artisan = (function(window, undefined) {
 			},
 			defaultColors: function(new_default){
 				default_colors = new_default;
-			}
-		},
-		set: {
-			stackLimit: function(limit){
-				// Default is 5
-				stack_limit = limit;
-			},
-			layerLimit: function(limit){
-				// Default is 5
-				layer_limit = limit;
-			},
-			dataSetLimit: function(limit){
-				// Default is 5
-				data_set_limit = limit;
-			},
-			historyLimit: function(limit){
-				// Default is 300
-				history_limit = limit;
 			}
 		},
 		setupCanvas: function(target){
@@ -66,9 +44,6 @@ var artisan = (function(window, undefined) {
 				new_layer.push(new_history);
 				new_stack.push(new_layer);
 				stacks.push(new_stack);
-				if (stacks.length > stack_limit) {
-					stacks.splice(0,1);
-				}
 			},
 			layer: function(stack){
 				// This creates a layer and adds it to the stack
@@ -79,10 +54,6 @@ var artisan = (function(window, undefined) {
 				var new_history = [];
 				new_layer.push(new_history);
 				stacks[stack].push(new_layer);
-				if (stacks[stack].length > layer_limit) {
-					stacks[stack].splice(0,1);
-				}
-				
 			},
 			history: function(stack, layer){
 				// This adds a history layer to a data set
@@ -94,9 +65,6 @@ var artisan = (function(window, undefined) {
 				}
 				var new_history = [];
 				stacks[stack][layer].push(new_history);
-				if (stacks[stack][layer].length > history_limit) {
-					stacks[stack][layer].splice(0,1);
-				}
 			}
 		},
 		clear: {
@@ -139,9 +107,6 @@ var artisan = (function(window, undefined) {
 			var new_history = [];
 			new_history.push(directive, information);
 			stacks[stack][layer][history_step].push(new_history);
-			if (stacks[stack][layer][history_step].length > history_limit) {
-				stacks[stack][layer][history_step].splice(0,1);
-			}
 		},
 		interpretElement: function(element){
 			var target = document.getElementById(element).tagName;
@@ -719,7 +684,6 @@ var artisan = (function(window, undefined) {
 				} else if (!history || isNaN(history) || history === 'latest') {
 					history = stacks[stack][l].length - 1;
 				}
-				
 				artisan.drawLayer(target, stack, l, history);
 			}
 		},
@@ -780,9 +744,6 @@ var artisan = (function(window, undefined) {
 					var new_history = current_history.toString();
 					if (new_history !== old_history) {
 						stacks[stack][layer][history].push(current_history);
-						if (stacks[stack][layer].length > history_limit) {
-							stacks[stack][layer][history].splice(1,1);
-						}
 					}
 		},
 		randomize: function(l,h){
