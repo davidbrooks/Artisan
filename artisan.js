@@ -772,34 +772,7 @@ var artisan = (function(window, undefined) {
 						// do things, like render circles and whatnot.
 						var directive = stacks[stack][layer][history][h][0];
 						var information = stacks[stack][layer][history][h][1];			
-						switch(directive) {
-							case "circle":
-								// Circle
-								artisan.drawCircle(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
-								break;
-							case "rectangle":
-								// Rectangle
-								artisan.drawRectangle(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
-								break;
-							case "path": 
-								// Path
-								artisan.drawPath(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
-								break;
-							case "image": 
-								// Image
-								artisan.drawImage(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
-								break;
-							case "line": 
-								// Image
-								artisan.drawLine(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
-								break;	
-							case "text":
-								// Text
-								artisan.drawText(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
-								break;
-							default:
-								// Standard Code
-						}
+						artisan.handleDeclaration(target,directive,information);
 					}
 					var old_history = stacks[stack][layer][history].toString();
 					var new_history = current_history.toString();
@@ -860,6 +833,39 @@ var artisan = (function(window, undefined) {
 				measurement = parseInt(measurement);
 			}
 			return measurement;
+		},
+		interpretRequest: function(request, scale_measure){
+			
+		},
+		handleDirective: function(target, directive, information){
+			switch(directive) {
+				case "circle":
+					// Circle
+					artisan.drawCircle(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+					break;
+				case "rectangle":
+					// Rectangle
+					artisan.drawRectangle(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+					break;
+				case "path": 
+					// Path
+					artisan.drawPath(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+					break;
+				case "image": 
+					// Image
+					artisan.drawImage(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+					break;
+				case "line": 
+					// Image
+					artisan.drawLine(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+					break;	
+				case "text":
+					// Text
+					artisan.drawText(target, information[0], information[1], information[2], information[3], information[4], information[5], information[6], information[7], information[8], information[9], information[10], information[11], information[12]);
+					break;
+				default:
+					// Standard Code
+			}
 		}
 	};
 })(this);
