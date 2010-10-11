@@ -12,10 +12,6 @@ var artisan = (function(window, undefined) {
 	var grids = [];
 	// Default values
 	var default_colors = ['#AC4A08', '#6C88A1', '#D9DCC6', '#EB9E1A', '#FBCC37'];
-	var stack_limit = 5;
-	var layer_limit = 5;
-	var data_set_limit = 5;
-	var history_limit = 300;
 	var contexts = [];
 	var global_rotate = 0;
 	var current_history = [];
@@ -30,24 +26,6 @@ var artisan = (function(window, undefined) {
 			},
 			defaultColors: function(new_default){
 				default_colors = new_default;
-			}
-		},
-		set: {
-			stackLimit: function(limit){
-				// Default is 5
-				stack_limit = limit;
-			},
-			layerLimit: function(limit){
-				// Default is 5
-				layer_limit = limit;
-			},
-			dataSetLimit: function(limit){
-				// Default is 5
-				data_set_limit = limit;
-			},
-			historyLimit: function(limit){
-				// Default is 300
-				history_limit = limit;
 			}
 		},
 		setupCanvas: function(target){
@@ -68,9 +46,6 @@ var artisan = (function(window, undefined) {
 				new_layer.push(new_history);
 				new_stack.push(new_layer);
 				stacks.push(new_stack);
-				if (stacks.length > stack_limit) {
-					stacks.splice(0,1);
-				}
 			},
 			layer: function(stack){
 				// This creates a layer and adds it to the stack
@@ -81,10 +56,6 @@ var artisan = (function(window, undefined) {
 				var new_history = [];
 				new_layer.push(new_history);
 				stacks[stack].push(new_layer);
-				if (stacks[stack].length > layer_limit) {
-					stacks[stack].splice(0,1);
-				}
-				
 			},
 			history: function(stack, layer){
 				// This adds a history layer to a data set
@@ -96,9 +67,6 @@ var artisan = (function(window, undefined) {
 				}
 				var new_history = [];
 				stacks[stack][layer].push(new_history);
-				if (stacks[stack][layer].length > history_limit) {
-					stacks[stack][layer].splice(0,1);
-				}
 			},
 			// Creates a grid with x columns and y rows. Style defines 'flex' or 'fixed' and cell_width/cell_height give fixed dimensions
 			grid: function(xs, ys, style, cell_width, cell_height){
@@ -160,9 +128,6 @@ var artisan = (function(window, undefined) {
 			var new_history = [];
 			new_history.push(directive, information);
 			stacks[stack][layer][history_step].push(new_history);
-			if (stacks[stack][layer][history_step].length > history_limit) {
-				stacks[stack][layer][history_step].splice(0,1);
-			}
 		},
 		addToGrid: function(grid, x, y, contents){
 			
@@ -186,23 +151,24 @@ var artisan = (function(window, undefined) {
 		},
 		drawCircle: function(target, placex, placey, radius, fill_color, line_width, stroke_color, alpha, shadow_blur, shadow_color, shadow_offset_x, shadow_offset_y){
 			// This handles the drawing of a circle in all three supported formats
-			if (placex !== 'random') {
-				placex = parseInt(placex, 10);
+			var targeted = document.getElementById(target);
+			var target_width = targeted.width;
+			var target_height = targeted.height;
+			if (placex && placex !== 'random') {
+				placex = artisan.analyzeValue(placex, target_width);
 			}
-			if (placey !== 'random') {
-				placey = parseInt(placey, 10);
+			if (placey && placey !== 'random') {
+				placey = artisan.analyzeValue(placey, target_height);
 			}
-			if (line_width !== 'random') {
-				line_width = parseInt(line_width, 10);
+			if (line_width && line_width !== 'random') {
+				line_width = artisan.analyzeValue(line_width, target_width);
 			}
 			if (shadow_blur !== 'random') {
 				shadow_blur = parseInt(shadow_blur, 10);
 			}
 			shadow_offset_x = parseInt(shadow_offset_x, 10);
 			shadow_offset_y = parseInt(shadow_offset_y, 10);
-			var targeted = document.getElementById(target);
-			var target_width = targeted.width;
-			var target_height = targeted.height;
+			
 			if (!placex) {
 				placex = 10;
 			} else if (placex === 'random') {
@@ -298,29 +264,29 @@ var artisan = (function(window, undefined) {
 			}
 		},
 		drawRectangle: function(target, start_x, start_y, width, height, fill_color, line_width, stroke_color, alpha, shadow_blur, shadow_color, shadow_offset_x, shadow_offset_y){
-			if (start_x !== 'random') {
-				start_x = parseInt(start_x, 10);
+			var targeted = document.getElementById(target);
+			var target_width = targeted.width;
+			var target_height = targeted.height;
+			if (start_x && start_x !== 'random') {
+				start_x = artisan.analyzeValue(start_x, target_width);
 			}
-			if (start_y !== 'random') {
-				start_y = parseInt(start_y, 10);
+			if (start_y && start_y !== 'random') {
+				start_y = artisan.analyzeValue(start_y, target_height);
 			}
-			if (width !== 'random') {
-				width = parseInt(width, 10);
+			if (width && width !== 'random') {
+				width = artisan.analyzeValue(width, target_width);
 			}
-			if (height !== 'random') {
-				height = parseInt(height, 10);
+			if (height && height !== 'random') {
+				height = artisan.analyzeValue(height, target_height);
 			}
-			if (line_width !== 'random') {
-				line_width = parseInt(line_width, 10);
+			if (line_width && line_width !== 'random') {
+				line_width = artisan.analyzeValue(line_width, target_width);
 			}
 			if (shadow_blur !== 'random') {
 				shadow_blur = parseInt(shadow_blur, 10);
 			}
 			shadow_offset_x = parseInt(shadow_offset_x, 10);
 			shadow_offset_y = parseInt(shadow_offset_y, 10);
-			var targeted = document.getElementById(target);
-			var target_width = targeted.width;
-			var target_height = targeted.height;
 			if (!start_x) {
 				start_x = 10;
 			} else if (start_x === 'random') {
@@ -412,25 +378,32 @@ var artisan = (function(window, undefined) {
 			}
 		},
 		drawImage: function(target, src, placex, placey, width, height, alpha, fill_color, line_width, stroke_color, shadow_blur, shadow_color, shadow_offset_x, shadow_offset_y){
+			var targeted = document.getElementById(target);
+			var target_width = targeted.width;
+			var target_height = targeted.height;
 			if (src) {
-				if (placex !== 'random') {
-					placex = parseInt(placex, 10);
+				if (placex && placex !== 'random') {
+					placex = artisan.analyzeValue(placex, target_width);
 				}
-				if (placey !== 'random') {
-					placey = parseInt(placey, 10);
+				if (placey && placey !== 'random') {
+					placey = artisan.analyzeValue(placey, target_height);
 				}
 				if (shadow_blur !== 'random') {
 					shadow_blur = parseInt(shadow_blur, 10);
 				}
-				width = parseInt(width, 10);
-				height = parseInt(height, 10);
 				shadow_offset_x = parseInt(shadow_offset_x, 10);
 				shadow_offset_y = parseInt(shadow_offset_y, 10);
-				var targeted = document.getElementById(target);
-				var target_width = targeted.width;
-				var target_height = targeted.height;
-				if (line_width !== 'random') {
-					line_width = parseInt(line_width, 10);
+				
+				if (width && width !== 'random') {
+					width = artisan.analyzeValue(width, target_width);
+				}
+				
+				if (height && height !== 'random') {
+					height = artisan.analyzeValue(height, target_height);
+				}
+				
+				if (line_width && line_width !== 'random') {
+					line_width = artisan.analyzeValue(line_width, target_width);
 				}
 				if (!placex) {
 					placex = 10;
@@ -525,6 +498,9 @@ var artisan = (function(window, undefined) {
 			}
 		},
 		drawPath: function(target, path, line_width, line_color, fill_color) {
+			var targeted = document.getElementById(target);
+			var target_width = targeted.width;
+			var target_height = targeted.height;
 			var cp1x, cp1y, cp2x, cp2y, cur_x, cur_y;
 			var context = artisan.findContext(target);
 			if (!path) {
@@ -540,12 +516,20 @@ var artisan = (function(window, undefined) {
 				fill_color = '';
 			}
 			var starting_point_x = path[0][0];
+			if (starting_point_x != 0 && starting_point_x) {
+				starting_point_x = artisan.analyzeValue(starting_point_x, target_width);
+			}
 			var starting_point_y = path[0][1];
+			if (starting_point_y != 0 && starting_point_y) {
+				starting_point_y = artisan.analyzeValue(starting_point_y, target_height);
+			}
 			context.beginPath();
 			context.moveTo(starting_point_x, starting_point_y);
 			for (p = 1; p < path.length; p++) {
 				var point_x = path[p][0];
+				point_x = artisan.analyzeValue(point_x, target_width);
 				var point_y = path[p][1];
+				point_y = artisan.analyzeValue(point_y, target_height);
 				if (!path[p][2]) {	
 					context.lineTo(point_x, point_y);
 				} else if (path[p][2] === 'bezier'){
@@ -565,6 +549,7 @@ var artisan = (function(window, undefined) {
 				cur_y = point_y;
 			}
 			if (line_width !== 0 && line_color !== '') {
+				line_width = artisan.analyzeValue(line_width, target_width);
 				context.lineWidth = line_width;
 				context.stroke();
 			}
@@ -578,6 +563,13 @@ var artisan = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
+			
+			if (start_x !== 'random' && start_x){
+				start_x = artisan.analyzeValue(start_x, target_width);
+			}
+			if (start_y !== 'random' && start_y){
+				start_y = artisan.analyzeValue(start_y, target_height);
+			}
 			if (start_x === 'random') {
 				start_x = artisan.randomize(0, target_width);
 			} else if (!start_x || isNaN(start_y)) {
@@ -587,6 +579,12 @@ var artisan = (function(window, undefined) {
 				start_y = artisan.randomize(0, target_height);
 			} else if (!start_y || isNaN(start_y)) {
 				start_y = '';
+			}
+			if (end_x !== 'random' && end_x){
+				end_x = artisan.analyzeValue(end_x, target_width);
+			}
+			if (end_y !== 'random' && end_y){
+				end_y = artisan.analyzeValue(end_y, target_height);
 			}
 			if (end_x === 'random') {
 				end_x = artisan.randomize(0, target_width);
@@ -598,6 +596,12 @@ var artisan = (function(window, undefined) {
 			} else if (!end_y || isNaN(end_y)) {
 				end_y = '';
 			}
+			if (cp1_x !== 'random' && cp1_x){
+				cp1_x = artisan.analyzeValue(cp1_x, target_width);
+			}
+			if (cp1_y !== 'random' && cp1_y){
+				cp1_y = artisan.analyzeValue(cp1_y, target_height);
+			}
 			if (cp1_x === 'random') {
 				cp1_x = artisan.randomize(0, target_width);
 			} else if (!cp1_x || isNaN(cp1_x)) {
@@ -608,6 +612,12 @@ var artisan = (function(window, undefined) {
 			} else if (!cp1_y || isNaN(cp1_y)) {
 				cp1_y = 0;
 			}
+			if (cp2_x !== 'random' && cp2_x){
+				cp2_x = artisan.analyzeValue(cp2_x, target_width);
+			}
+			if (cp2_y !== 'random' && cp2_y){
+				cp2_y = artisan.analyzeValue(cp2_y, target_height);
+			}
 			if (cp2_x === 'random') {
 				cp2_x = artisan.randomize(0, target_width);
 			} else if (!cp2_x || isNaN(cp2_x)) {
@@ -617,6 +627,9 @@ var artisan = (function(window, undefined) {
 				cp2_y = artisan.randomize(0, target_height);
 			} else if (!cp2_y || isNaN(cp2_y)) {
 				cp2_y = 0;
+			}
+			if (line_width !== 'random' && line_width) {
+				line_width = artisan.analyzeValue(line_width, target_width);
 			}
 			if (!line_width || isNaN(line_width) || line_width === null) {
 				line_width = 0;
@@ -663,6 +676,12 @@ var artisan = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
+			if (place_x !== 'random' && place_x){
+				place_x = artisan.analyzeValue(place_x, target_width);
+			}
+			if (place_y !== 'random' && place_y){
+				place_y = artisan.analyzeValue(place_y, target_height);
+			}
 			if (place_x === 'random') {
 				place_x = artisan.randomize(0, target_width);
 			} else if (!place_x || isNaN(place_x)) {
@@ -676,17 +695,21 @@ var artisan = (function(window, undefined) {
 			if (!text) {
 				text = '';
 			}
-			if (text_color === 'random') {
+			if (!text_color) { 
+				text_color = '#000000';
+			} else if (text_color === 'random') {
 				chosen_color = artisan.randomize(0, default_colors.length);
 				text_color = default_colors[chosen_color];
 			} else if (text_color.constructor.toString().indexOf("Array") !== -1) {
 				chosen_color = artisan.randomize(0, text_color.length);
 				text_color = text_color[chosen_color];
-			}
+			} 
 			if (!weight) {
 				weight = '';
 			}
-			if (size === 'random') {
+			if (size !== 'random' && size) {
+				size = artisan.analyzeValue(size, target_width) + 'px';
+			} else if (size === 'random') {
 				size = artisan.randomize(0,190) + 'px';
 			} else if (!size) {
 				size = '15px';
@@ -702,6 +725,9 @@ var artisan = (function(window, undefined) {
 				alpha = artisan.randomize(0,100) / 100;
 			} else if (!alpha || isNaN(alpha)) {
 				alpha = 1;
+			}
+			if (line_width !== 'random' && line_width){
+				line_width = artisan.analyzeValue(line_width, target_width);
 			}
 			if (line_width === 'random') {
 				line_width = artisan.randomize(0, 10);
@@ -743,7 +769,6 @@ var artisan = (function(window, undefined) {
 				} else if (!history || isNaN(history) || history === 'latest') {
 					history = stacks[stack][l].length - 1;
 				}
-				
 				artisan.drawLayer(target, stack, l, history);
 			}
 		},
@@ -804,9 +829,6 @@ var artisan = (function(window, undefined) {
 					var new_history = current_history.toString();
 					if (new_history !== old_history) {
 						stacks[stack][layer][history].push(current_history);
-						if (stacks[stack][layer].length > history_limit) {
-							stacks[stack][layer][history].splice(1,1);
-						}
 					}
 		},
 		drawGrid: function(target, grid){
@@ -850,6 +872,21 @@ var artisan = (function(window, undefined) {
 		},
 		resetDefaults: function(context){
 			context.globalAlpha = 1;
+		},
+		analyzeValue: function(measurement, scale_measure) {
+			var measurement = measurement.toString();
+			if (!!(measurement.match('%'))) {
+				// This is a percentage value
+				measurement = parseFloat(measurement);
+				measurement = artisan.convertToPixels(measurement, scale_measure);
+			} else if (!!(measurement.match('px'))){
+				// This is a pixel value
+				measurement = parseInt(measurement);
+			} else {
+				// This is neither specified as pixel or percentage
+				measurement = parseInt(measurement);
+			}
+			return measurement;
 		}
 	};
 })(this);
