@@ -4,7 +4,7 @@ var artisan = (function(window, undefined) {
 	*/
 	if (!document.createElement('canvas').getContext) {
 		return;
-	}
+	} 
 	// Stacks are the collections of layers, and histories
 	var stacks = [];
 	var color_schemes = [];
@@ -13,6 +13,7 @@ var artisan = (function(window, undefined) {
 	var contexts = [];
 	var global_rotate = 0;
 	var current_history = [];
+	var images = [];
 	
 	return {
 		define: {
@@ -130,76 +131,24 @@ var artisan = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
-			if (placex && placex !== 'random') {
-				placex = artisan.analyzeValue(placex, target_width);
-			}
-			if (placey && placey !== 'random') {
-				placey = artisan.analyzeValue(placey, target_height);
-			}
-			if (line_width && line_width !== 'random') {
-				line_width = artisan.analyzeValue(line_width, target_width);
-			}
+			placex = artisan.interpretRequest(placex, target_width);
+			placey = artisan.interpretRequest(placey, target_height);
+			line_width = artisan.interpretRequest(line_width, target_width);
+			radius = artisan.interpretRequest(radius, target_width);
+			fill_color = artisan.interpretColor(fill_color);
+			alpha = artisan.interpretAlpha(alpha);
+			stroke_color = artisan.interpretColor(stroke_color);
+			shadow_color = artisan.interpretColor(shadow_color);
 			if (shadow_blur !== 'random') {
 				shadow_blur = parseInt(shadow_blur, 10);
 			}
 			shadow_offset_x = parseInt(shadow_offset_x, 10);
 			shadow_offset_y = parseInt(shadow_offset_y, 10);
-			
-			if (!placex) {
-				placex = 10;
-			} else if (placex === 'random') {
-				placex = artisan.randomize(0, target_width);
-			} 
-			if (!placey) {
-				placey = 10;
-			} else if (placey === 'random') {
-				placey = artisan.randomize(0, target_height);
-			}
-			if (!radius) {
-				radius = 10;
-			} else if (radius === 'random') {
-				radius = artisan.randomize(0, target_width);
-			}
-			if (fill_color === null) {
-				fill_color = '';
-			} else if (!fill_color) {
-				fill_color = default_colors[0];
-			} else if (fill_color.constructor.toString().indexOf("Array") !== -1) {
-				var chosen = artisan.randomize(0,fill_color.length);
-				fill_color = fill_color[chosen];
-			} else if (fill_color === 'random'){
-				var chosen_fill = artisan.randomize(0, default_colors.length);
-				fill_color = default_colors[chosen_fill];
-			}
-			if (!line_width) {
-				line_width = 0;
-			} else if (line_width === 'random') {
-				line_width = artisan.randomize(0,50);
-			}
-			if (!stroke_color) {
-				stroke_color = default_colors[0];
-			} else if (stroke_color === 'random') {
-				stroke_color = default_colors[artisan.randomize(0, default_colors.length)];
-			} else if (stroke_color.constructor.toString().indexOf("Array") !== -1) {
-				stroke_color = stroke_color[artisan.randomize(0,stroke_color.length)];
-			}
-			if (!alpha){
-				alpha = 1;
-			} else if (alpha === 'random') {
-				alpha = artisan.randomize(0, 100) / 100;
-			}
 			if (!shadow_blur) {
 				shadow_blur = 0;
 			} else if (shadow_blur === 'random') {
 				shadow_blur = artisan.randomize(0,30);
 			} 
-			if (!shadow_color) {
-				shadow_color = '';
-			} else if (shadow_color === 'random') {
-				shadow_color = default_colors[artisan.randomize(0,default_colors.length)];
-			} else if (shadow_color.length) {
-				shadow_color = shadow_color[artisan.randomize(0,shadow_color.length)];
-			}
 			if (!shadow_offset_x || isNaN(shadow_offset_x)){
 				shadow_offset_x = 0;
 			}
@@ -243,74 +192,19 @@ var artisan = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
-			if (start_x && start_x !== 'random') {
-				start_x = artisan.analyzeValue(start_x, target_width);
-			}
-			if (start_y && start_y !== 'random') {
-				start_y = artisan.analyzeValue(start_y, target_height);
-			}
-			if (width && width !== 'random') {
-				width = artisan.analyzeValue(width, target_width);
-			}
-			if (height && height !== 'random') {
-				height = artisan.analyzeValue(height, target_height);
-			}
-			if (line_width && line_width !== 'random') {
-				line_width = artisan.analyzeValue(line_width, target_width);
-			}
+			start_x = artisan.interpretRequest(start_x, target_width);
+			start_y = artisan.interpretRequest(start_y, target_height);
+			width = artisan.interpretRequest(width, target_width);
+			height = artisan.interpretRequest(height, target_height);
+			line_width = artisan.interpretRequest(line_width, target_width);
+			stroke_color = artisan.interpretColor(stroke_color);
+			fill_color = artisan.interpretColor(fill_color);
+			alpha = artisan.interpretAlpha(alpha);
 			if (shadow_blur !== 'random') {
 				shadow_blur = parseInt(shadow_blur, 10);
 			}
 			shadow_offset_x = parseInt(shadow_offset_x, 10);
 			shadow_offset_y = parseInt(shadow_offset_y, 10);
-			if (!start_x) {
-				start_x = 10;
-			} else if (start_x === 'random') {
-				start_x = artisan.randomize(0, target_width);
-			} 
-			if (!start_y) {
-				start_y = 10;
-			} else if (start_y === 'random') {
-				start_y = artisan.randomize(0, target_height);
-			}
-			if (!width) {
-				width = 15;
-			} else if (width === 'random') {
-				width = artisan.randomize(0, target_height);
-			}
-			if (!height) {
-				height = 15;
-			} else if (height === 'random') {
-				height = artisan.randomize(0, target_height);
-			}
-			if (fill_color === null) {
-				fill_color = '';
-			} else if (!fill_color) {
-				fill_color = default_colors[0];
-			} else if (fill_color.constructor.toString().indexOf("Array") !== -1) {
-				var chosen = artisan.randomize(0,fill_color.length);
-				fill_color = fill_color[chosen];
-			} else if (fill_color === 'random'){
-				var chosen_fill = artisan.randomize(0, default_colors.length);
-				fill_color = default_colors[chosen_fill];
-			}
-			if (!line_width) {
-				line_width = 0;
-			} else if (line_width === 'random') {
-				line_width = artisan.randomize(0,50);
-			}
-			if (!stroke_color) {
-				stroke_color = default_colors[0];
-			} else if (stroke_color === 'random') {
-				stroke_color = default_colors[artisan.randomize(0, default_colors.length)];
-			} else if (stroke_color.length) {
-				stroke_color = stroke_color[artisan.randomize(0,stroke_color.length)];
-			}
-			if (!alpha){
-				alpha = 1;
-			} else if (alpha === 'random') {
-				alpha = artisan.randomize(0, 100) / 100;
-			}
 			if (!shadow_blur) {
 				shadow_blur = 0;
 			} else if (shadow_blur === 'random') {
@@ -358,79 +252,20 @@ var artisan = (function(window, undefined) {
 			var target_width = targeted.width;
 			var target_height = targeted.height;
 			if (src) {
-				if (placex && placex !== 'random') {
-					placex = artisan.analyzeValue(placex, target_width);
-				}
-				if (placey && placey !== 'random') {
-					placey = artisan.analyzeValue(placey, target_height);
-				}
+				placex = artisan.interpretRequest(placex, target_width);
+				placey = artisan.interpretRequest(placey, target_height);
+				width = artisan.interpretRequest(width, target_width);
+				height = artisan.interpretRequest(height, target_height);
+				line_width = artisan.interpretRequest(line_width, target_width);
+				fill_color = artisan.interpretColor(fill_color);
+				alpha = artisan.interpretAlpha(alpha);
+				stroke_color = artisan.interpretColor(stroke_color);
+				shadow_color = artisan.interpretColor(shadow_color);
 				if (shadow_blur !== 'random') {
 					shadow_blur = parseInt(shadow_blur, 10);
 				}
 				shadow_offset_x = parseInt(shadow_offset_x, 10);
 				shadow_offset_y = parseInt(shadow_offset_y, 10);
-				
-				if (width && width !== 'random') {
-					width = artisan.analyzeValue(width, target_width);
-				}
-				
-				if (height && height !== 'random') {
-					height = artisan.analyzeValue(height, target_height);
-				}
-				
-				if (line_width && line_width !== 'random') {
-					line_width = artisan.analyzeValue(line_width, target_width);
-				}
-				if (!placex) {
-					placex = 10;
-				} else if (placex === 'random') {
-					placex = artisan.randomize(0, target_width);
-				} 
-				if (!placey) {
-					placey = 10;
-				} else if (placey === 'random') {
-					placey = artisan.randomize(0, target_height);
-				}
-				if (!width) {
-					width = 100;
-				} else if (width === 'random') {
-					width = artisan.randomize(0, target_width);
-				}
-				if (!height) {
-					height = 100;
-				} else if (height === 'random') {
-					height = artisan.randomize(0, target_height);
-				}
-				if (fill_color === null) {
-					fill_color = '';
-				} else if (!fill_color) {
-					fill_color = default_colors[0];
-				} else if (fill_color.constructor.toString().indexOf("Array") !== -1) {
-					var chosen = artisan.randomize(0,fill_color.length);
-					fill_color = fill_color[chosen];
-				} else if (fill_color === 'random'){
-					var chosen_fill = artisan.randomize(0, default_colors.length);
-					fill_color = default_colors[chosen_fill];
-				}
-				if (!line_width) {
-					line_width = 0;
-				} else if (line_width === 'random') {
-					line_width = artisan.randomize(0,50);
-				}
-				if (!stroke_color) {
-					stroke_color = default_colors[0];
-				} else if (stroke_color === 'random') {
-					stroke_color = default_colors[artisan.randomize(0, default_colors.length)];
-				} else if (stroke_color.constructor.toString().indexOf("Array") !== -1) {
-					stroke_color = stroke_color[artisan.randomize(0,stroke_color.length)];
-				}
-				if (!alpha){
-					alpha = 1;
-				} else if (alpha === 'random') {
-					alpha = artisan.randomize(0, 100) / 100;
-				} else if (alpha <= 1) {
-					alpha = alpha * 100;
-				}
 				if (!shadow_blur) {
 					shadow_blur = 0;
 				} else if (shadow_blur === 'random') {
@@ -454,7 +289,7 @@ var artisan = (function(window, undefined) {
 				case "CANVAS":
 					// Canvas
 					var context = artisan.findContext(target);
-					var this_image = new Image();
+					this_image = new Image();
 					this_image.src = src;
 					this_image.style.opacity = alpha;
 					this_image.style.MozOpacity = alpha;
@@ -473,7 +308,7 @@ var artisan = (function(window, undefined) {
 				}
 			}
 		},
-		drawPath: function(target, path, line_width, line_color, fill_color) {
+		drawPath: function(target, path, line_width, line_color, fill_color, alpha) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
@@ -482,43 +317,42 @@ var artisan = (function(window, undefined) {
 			if (!path) {
 				path = [[0,0]];
 			}
-			if (!line_width || isNaN(line_width) || line_width === null) {
-				line_width = 0;
-			}
-			if (!line_color || line_color === null) {
-				line_color = '';
-			}
-			if (!fill_color || fill_color === null) {
-				fill_color = '';
-			}
+			line_width = artisan.interpretRequest(line_width, target_width);
+			fill_color = artisan.interpretColor(fill_color);
+			alpha = artisan.interpretAlpha(alpha);
+			line_color = artisan.interpretColor(line_color);
 			var starting_point_x = path[0][0];
-			if (starting_point_x != 0 && starting_point_x) {
-				starting_point_x = artisan.analyzeValue(starting_point_x, target_width);
-			}
+			starting_point_x = artisan.interpretRequest(starting_point_x, target_width);
 			var starting_point_y = path[0][1];
-			if (starting_point_y != 0 && starting_point_y) {
-				starting_point_y = artisan.analyzeValue(starting_point_y, target_height);
-			}
+			starting_point_y = artisan.interpretRequest(starting_point_y, target_height);
 			context.beginPath();
 			context.moveTo(starting_point_x, starting_point_y);
 			for (p = 1; p < path.length; p++) {
 				var point_x = path[p][0];
-				point_x = artisan.analyzeValue(point_x, target_width);
+				point_x = artisan.interpretRequest(point_x, target_width);
 				var point_y = path[p][1];
-				point_y = artisan.analyzeValue(point_y, target_height);
+				point_y = artisan.interpretRequest(point_y, target_height);
 				if (!path[p][2]) {	
 					context.lineTo(point_x, point_y);
 				} else if (path[p][2] === 'bezier'){
 					cp1x = path[p][3];
+					cp1x = artisan.interpretRequest(cp1x, target_width);
 					cp1y = path[p][4];
+					cp1y = artisan.interpretRequest(cp1y, target_height);
 					cp2x = path[p][5];
+					cp2x = artisan.interpretRequest(cp2x, target_width);
 					cp2y = path[p][6];
+					cp2y = artisan.interpretRequest(cp2y, target_height);
 					context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, point_x, point_y);
 				} else if (path[p][2] === 'quadratic') {
-					cp1x = cur_x + 2.0/3.0*(path[p][3] - cur_x);  
-					cp1y = cur_y + 2.0/3.0*(path[p][4] - cur_y);  
+					cp1x = cur_x + 2.0/3.0*(path[p][3] - cur_x); 
+					cp1x = artisan.interpretRequest(cp1x, target_width); 
+					cp1y = cur_y + 2.0/3.0*(path[p][4] - cur_y); 
+					cp1y = artisan.interpretRequest(cp1y, target_height); 
 					cp2x = cp1x + (point_x - cur_x)/3.0;  
+					cp2x = artisan.interpretRequest(cp2x, target_width);
 					cp2y = cp1y + (point_y - cur_y)/3.0;  
+					cp2y = artisan.interpretRequest(cp2y, target_height);
 					context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, point_x, point_y);
 				}
 				cur_x = point_x;
@@ -539,83 +373,16 @@ var artisan = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
-			
-			if (start_x !== 'random' && start_x){
-				start_x = artisan.analyzeValue(start_x, target_width);
-			}
-			if (start_y !== 'random' && start_y){
-				start_y = artisan.analyzeValue(start_y, target_height);
-			}
-			if (start_x === 'random') {
-				start_x = artisan.randomize(0, target_width);
-			} else if (!start_x || isNaN(start_y)) {
-				start_x = '';
-			}
-			if (start_y === 'random') {
-				start_y = artisan.randomize(0, target_height);
-			} else if (!start_y || isNaN(start_y)) {
-				start_y = '';
-			}
-			if (end_x !== 'random' && end_x){
-				end_x = artisan.analyzeValue(end_x, target_width);
-			}
-			if (end_y !== 'random' && end_y){
-				end_y = artisan.analyzeValue(end_y, target_height);
-			}
-			if (end_x === 'random') {
-				end_x = artisan.randomize(0, target_width);
-			} else if (!end_x || isNaN(end_y)) {
-				end_x = '';
-			}
-			if (end_y === 'random') {
-				end_y = artisan.randomize(0, target_height);
-			} else if (!end_y || isNaN(end_y)) {
-				end_y = '';
-			}
-			if (cp1_x !== 'random' && cp1_x){
-				cp1_x = artisan.analyzeValue(cp1_x, target_width);
-			}
-			if (cp1_y !== 'random' && cp1_y){
-				cp1_y = artisan.analyzeValue(cp1_y, target_height);
-			}
-			if (cp1_x === 'random') {
-				cp1_x = artisan.randomize(0, target_width);
-			} else if (!cp1_x || isNaN(cp1_x)) {
-				cp1_x = 0;
-			}
-			if (cp1_y === 'random') {
-				cp1_y = artisan.randomize(0, target_height);
-			} else if (!cp1_y || isNaN(cp1_y)) {
-				cp1_y = 0;
-			}
-			if (cp2_x !== 'random' && cp2_x){
-				cp2_x = artisan.analyzeValue(cp2_x, target_width);
-			}
-			if (cp2_y !== 'random' && cp2_y){
-				cp2_y = artisan.analyzeValue(cp2_y, target_height);
-			}
-			if (cp2_x === 'random') {
-				cp2_x = artisan.randomize(0, target_width);
-			} else if (!cp2_x || isNaN(cp2_x)) {
-				cp2_x = 0;
-			}
-			if (cp2_y === 'random') {
-				cp2_y = artisan.randomize(0, target_height);
-			} else if (!cp2_y || isNaN(cp2_y)) {
-				cp2_y = 0;
-			}
-			if (line_width !== 'random' && line_width) {
-				line_width = artisan.analyzeValue(line_width, target_width);
-			}
-			if (!line_width || isNaN(line_width) || line_width === null) {
-				line_width = 0;
-			}
-			if (line_color === 'random') {
-				var chosen_color = artisan.randomize(0, default_colors.length);
-				line_color = default_colors[chosen_color];
-			} else if (!line_color || line_color === null) {
-				line_color = '';
-			}
+			start_x = artisan.interpretRequest(start_x, target_width);
+			start_y = artisan.interpretRequest(start_y, target_height);
+			end_x = artisan.interpretRequest(end_x, target_width);
+			end_y = artisan.interpretRequest(end_y, target_height);
+			cp1_x = artisan.interpretRequest(cp1_x, target_width);
+			cp1_y = artisan.interpretRequest(cp1_y, target_height);
+			cp2_x = artisan.interpretRequest(cp2_x, target_width);
+			cp2_y = artisan.interpretRequest(cp2_y, target_height);
+			line_width = artisan.interpretRequest(line_width, target_width);
+			line_color = artisan.interpretColor(line_color);
 			var context = artisan.findContext(target);
 			context.beginPath();
 			context.moveTo(start_x, start_y);
@@ -652,34 +419,15 @@ var artisan = (function(window, undefined) {
 			var targeted = document.getElementById(target);
 			var target_width = targeted.width;
 			var target_height = targeted.height;
-			if (place_x !== 'random' && place_x){
-				place_x = artisan.analyzeValue(place_x, target_width);
-			}
-			if (place_y !== 'random' && place_y){
-				place_y = artisan.analyzeValue(place_y, target_height);
-			}
-			if (place_x === 'random') {
-				place_x = artisan.randomize(0, target_width);
-			} else if (!place_x || isNaN(place_x)) {
-				place_x = 0;
-			}
-			if (place_y === 'random') {
-				place_y = artisan.randomize(0, target_height);
-			} else if (!place_y || isNaN(place_y)) {
-				place_y = 0;
-			}
+			place_x = artisan.interpretRequest(place_x, target_width);
+			place_y = artisan.interpretRequest(place_y, target_height);
+			text_color = artisan.interpretColor(text_color);
+			alpha = artisan.interpretAlpha(alpha);
+			line_width = artisan.interpretRequest(line_width, target_width);
+			line_color = artisan.interpretColor(line_color);
 			if (!text) {
 				text = '';
 			}
-			if (!text_color) { 
-				text_color = '#000000';
-			} else if (text_color === 'random') {
-				chosen_color = artisan.randomize(0, default_colors.length);
-				text_color = default_colors[chosen_color];
-			} else if (text_color.constructor.toString().indexOf("Array") !== -1) {
-				chosen_color = artisan.randomize(0, text_color.length);
-				text_color = text_color[chosen_color];
-			} 
 			if (!weight) {
 				weight = '';
 			}
@@ -696,25 +444,6 @@ var artisan = (function(window, undefined) {
 			var font_style = weight + ' ' + size + ' ' + font;
 			if (!align) {
 				align = 'left';
-			}
-			if (alpha === 'random') {
-				alpha = artisan.randomize(0,100) / 100;
-			} else if (!alpha || isNaN(alpha)) {
-				alpha = 1;
-			}
-			if (line_width !== 'random' && line_width){
-				line_width = artisan.analyzeValue(line_width, target_width);
-			}
-			if (line_width === 'random') {
-				line_width = artisan.randomize(0, 10);
-			} else if (!line_width || isNaN(line_width)) {
-				line_width = 0;
-			}
-			if (line_color === 'random') {
-				chosen_color = artisan.randomize(0, default_colors.length);
-				line_color = default_colors[chosen_color];
-			} else if (!line_color) {
-				line_color = '';
 			}
 			if (!baseline) {
 				baseline = 'top';
@@ -772,7 +501,7 @@ var artisan = (function(window, undefined) {
 						// do things, like render circles and whatnot.
 						var directive = stacks[stack][layer][history][h][0];
 						var information = stacks[stack][layer][history][h][1];			
-						artisan.handleDeclaration(target,directive,information);
+						artisan.handleDirective(target,directive,information);
 					}
 					var old_history = stacks[stack][layer][history].toString();
 					var new_history = current_history.toString();
@@ -835,7 +564,44 @@ var artisan = (function(window, undefined) {
 			return measurement;
 		},
 		interpretRequest: function(request, scale_measure){
-			
+			var num_check = parseInt(request);
+			if (request === 'random') {
+				request = artisan.randomize(0, scale_measure);
+			} else if (request === 'center') {
+				request = scale_measure / 2;
+			} else if (!request || isNaN(num_check)){
+				request = 0;
+			} else {
+				request = artisan.analyzeValue(request, scale_measure);
+			}
+			return request;
+		},
+		interpretColor: function(request) {
+			if (request === null || !request) {
+				request = '';
+			} else if (request.constructor.toString().indexOf("Array") !== -1) {
+				var chosen = artisan.randomize(0,request.length);
+				request = fill_color[chosen];
+			} else if (request === 'random'){
+				var chosen_fill = artisan.randomize(0, default_colors.length);
+				request = default_colors[chosen_fill];
+			} else {
+				request = request;
+			}
+			return request;
+		},
+		interpretAlpha: function(alpha){
+			if (alpha) {
+				alpha = alpha.toString();
+				if (!!(alpha.match('%'))){
+					alpha = parseFloat(alpha) / 100;
+				} else if (alpha === 'random') {
+					alpha = artisan.randomize(0, 100) / 100;
+				}
+			} else {
+				alpha = 1;
+			}
+			return alpha;
 		},
 		handleDirective: function(target, directive, information){
 			switch(directive) {
