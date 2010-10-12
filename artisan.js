@@ -581,7 +581,7 @@ var artisan = (function(window, undefined) {
 				request = '';
 			} else if (request.constructor.toString().indexOf("Array") !== -1) {
 				var chosen = artisan.randomize(0,request.length);
-				request = fill_color[chosen];
+				request = request[chosen];
 			} else if (request === 'random'){
 				var chosen_fill = artisan.randomize(0, default_colors.length);
 				request = default_colors[chosen_fill];
