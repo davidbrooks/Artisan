@@ -288,6 +288,7 @@ var artisan = (function(window, undefined) {
 				switch(format) {
 				case "CANVAS":
 					// Canvas
+                                        var this_image = '';
 					var context = artisan.findContext(target);
 					this_image = new Image();
 					this_image.src = src;
