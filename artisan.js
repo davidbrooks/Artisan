@@ -45,6 +45,7 @@ var artisan = (function(window, undefined) {
 				new_layer.push(new_history);
 				new_stack.push(new_layer);
 				stacks.push(new_stack);
+				return stacks.length - 1;
 			},
 			layer: function(stack){
 				// This creates a layer and adds it to the stack
@@ -55,6 +56,7 @@ var artisan = (function(window, undefined) {
 				var new_history = [];
 				new_layer.push(new_history);
 				stacks[stack].push(new_layer);
+				return stacks[stack].length - 1;
 			},
 			history: function(stack, layer){
 				// This adds a history layer to a data set
@@ -66,6 +68,7 @@ var artisan = (function(window, undefined) {
 				}
 				var new_history = [];
 				stacks[stack][layer].push(new_history);
+				return stacks[stack][layer].length - 1;
 			}
 		},
 		clear: {
@@ -288,9 +291,8 @@ var artisan = (function(window, undefined) {
 				switch(format) {
 				case "CANVAS":
 					// Canvas
-                                        var this_image = '';
 					var context = artisan.findContext(target);
-					this_image = new Image();
+					var this_image = new Image();
 					this_image.src = src;
 					this_image.style.opacity = alpha;
 					this_image.style.MozOpacity = alpha;
